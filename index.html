@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="./dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
+</head>
+<body>
+<!--start section container-->
+<section class="container-fluid">
+    <!--    start title-->
+    <section class="row m-0 p-0">
+        <section class="col-12 heading">
+            <section class="jumbotron bg-dark title">
+                <h1 class="header text-capitalize">weather dashboard</h1>
+            </section>
+        </section>
+    </section>
+    <!--    end title-->
+
+    <section class="row m-0 p-0">
+        <!--        left Column-->
+        <section class="col-4 leftCol">
+            <h6 class="searchHeader">Search for a City:</h6>
+            <form action="" class="form-inline mb-3">
+                <section>
+                    <input type="text" class="form-control" id="inputVal">
+                    <button type="submit" id="search" class="btn btn-primary search"><i class="fas fa-search"></i>
+                    </button>
+                </section>
+            </form>
+            <!--            This is where our search history goes-->
+            <section id="searchHistory"></section>
+            <!--            end of search history section-->
+        </section>
+        <!--        end of left column-->
+
+        <!--        right column-->
+        <section class="col-8 rightCol">
+            <!--            current Condition section-->
+            <section id="currentCond" class="currentCond mb-3">
+
+            </section>
+            <!--            end of current Condition section-->
+
+            <!--            future Condition section-->
+            <section id="futureCond" class="futureCond">
+                <h4>5-Day Forecast:</h4>
+                <!--                this is where future conditions go-->
+                <section class="card-deck" id="futureInfo">
+<!--                    <div class="card bg-primary" id="forecastFuture">-->
+<!--                        <div class="card-body">-->
+<!--                            <p class="card-text">Temp: 86.84 F</p>-->
+<!--                            <img src="" alt="">-->
+<!--                            <p class="card-text">Temp: 86.84 F</p>-->
+<!--                            <p class="card-text">Temp: 86.84 F</p>-->
+<!--                        </div>-->
+<!--                    </div>-->
+
+
+                </section>
+            </section>
+            <!--            end of future Condition section-->
+        </section>
+        <!--        end of right column-->
+
+    </section>
+
+</section>
+<!--End section container-->
+
+<script src="./dist/js/jquery-3.3.1.min.js"></script>
+<script src="./dist/js/popper.min.js"></script>
+<script src="./dist/js/bootstrap.min.js"></script>
+<script src="./index.js"></script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+.header{
+    color: white;
+    font-size: 30px;
+    text-align: center;
+}
+.title {
+    padding:35px 0;
+    border-radius: 0;
+    margin-bottom: 0;
+}
+.leftCol{
+    background-color:GhostWhite;
+    height:200px;
+    /*margin-left: 15px;*/
+    padding:8px 15px 18px 8px;
+}
+.searchHeader{
+    font-size:18px;
+}
+.search{
+    margin-left:-4px!important;
+}
+#searchHistory{
+    height:100px;
+    background-color: white;
+}
+.rightCol{
+    height:300px;
+    background-color: white;
+    /*padding:15px;*/
+    /*padding-right: 0;*/
+    padding:15px 0 15px 15px;
+
+}
+.heading{
+    padding-left: 0;
+    padding-right:0;
+}
+.currentCond{
+    border:1px solid lightgray;
+    height:300px;
+    border-right:0;
+    padding:15px 0 15px 15px;
+}
+.futureCond {
+    height:300px;
+    background-color: lightcyan;
+}
+.card {
+    width:100px!important;
+
+    /*margin-right:20px!important;*/
+
+}
+.card-text{
+    color:white;
+
+}
+.card-body{
+    text-align:left!important;
+}
+#city {
+    font-size: 25px;
+    font-weight: 500;
+}
+#UVData {
+    background-color: red;
+    border-radius: 3px;
+    padding: 4px;
+    color:white;
+}
