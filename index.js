@@ -11,7 +11,7 @@ $(function () {
             appid: 'ea96ca10dc430cd769f78ede39efa7a1',
             units: 'imperial'
         };
-        getForecastData();
+        // getForecastData();
         getWeatherData();
         // getForecastData();
 
@@ -33,6 +33,8 @@ function getWeatherData() {
         method: 'GET',
         success: function (data, textStatus) {
             processData(data);
+
+
             // $('#currentCond').text(data.weather[0].icon);
         },
         error: function (xhr, textStatus) {
@@ -45,10 +47,14 @@ let ul;
 
 // localStorage
 let storeCurrentArray = [];
-let storeCurrentData = {};
+let storeData = {};
 let currentDate;
-function processData(data) {
-    let dataRes = data;
+let currentDataRes;
+let UVRes;
+
+async function processData(data) {
+    console.log('first');
+    currentDataRes = data;
     // console.log(data);
     $('#currentCond').empty();
     // print city and date
@@ -95,17 +101,15 @@ function processData(data) {
     let latitude = data.coord.lat;
     // console.log(data.coord.lon);
     let longitude = data.coord.lon;
-
+    let UVResult = await getUVIndex(latitude, longitude);
+    console.log(UVResult);
+    UVIndex= getUVData(UVResult);
+    getForecastData();
     //to local storage
-    // storeCurrentData['city'] = data.name;
-    // storeCurrentData['currDate'] = currentDate;
-    // storeCurrentData['currIcon'] = data.weather[0].icon;
-    // storeCurrentData['currTemp'] = data.main.temp;
-    // storeCurrentData['currHumidity'] = data.main.humidity;
-    // storeCurrentData['currWS'] = data.wind.speed;
+
 
     //UV Index
-    getUVIndex(latitude, longitude, dataRes);
+
 
 
 }
@@ -113,66 +117,84 @@ function processData(data) {
 // let urlQuery = "api.openweathermap.org/data/2.5/weather?q={city name}&appid={API key}
 // let urlQuery = "https://api.openweathermap.org/data/2.5/weather?q=London,uk&appid=YOUR_API_KEY";
 // let urlQuery = "https://api.openweathermap.org/data/2.5/weather?";
+let UVIndex;
 
-function getUVIndex(lat, lon, data) {
-    // let response;
 
-    $.ajax({
-        url: `http://api.openweathermap.org/data/2.5/uvi?lat=${lat}&lon=${lon}&appid=ea96ca10dc430cd769f78ede39efa7a1`,
-        // url: `http://api.openweathermap.org/v3/uvi/40.7,-74.2/current.json?appid=ea96ca10dc430cd769f78ede39efa7a1`,
-        method: 'GET',
-        success: function (res) {
+async function getUVIndex(lat, lon) {
+    let res;
+    try {
+        res = await $.ajax({
+            url: `http://api.openweathermap.org/data/2.5/uvi?lat=${lat}&lon=${lon}&appid=ea96ca10dc430cd769f78ede39efa7a1`,
+            // url: `http://api.openweathermap.org/v3/uvi/40.7,-74.2/current.json?appid=ea96ca10dc430cd769f78ede39efa7a1`,
+            method: 'GET'
+        });
+    } catch(error) {
+        console.log(error);
+    }
+    return res;
+
+}
+        // success: function (res) {
             // console.log(res.value);
-            let UVIndex = res.value;
+            // console.log('second');
+            // getUVData(res);
+
+            // UVRes = res;
+            // UVIndex = res.value;
             // console.log(UVIndex);
-            let UVIndexVal = $('<li>');
-            UVIndexVal.append('UV Index: ' + '<span id="UVData">' + UVIndex + '</span>');
-            ul.append(UVIndexVal);
-        //    to local storage
-            storeCurrentData['currUV'] = UVIndex;
+            // let UVIndexVal = $('<li>');
+            // UVIndexVal.append('UV Index: ' + '<span id="UVData">' + UVIndex + '</span>');
+            // ul.append(UVIndexVal);
 
-            console.log('result',resultRes);
+            //    to local storage
+            //     storeData['currUV'] = UVIndex;
 
-            let getStoreWeather = getCurrWXStorage();
-            if(getStoreWeather === null) {
-                getStoreWeather = [];
-                storeCurrentData['city'] = data.name;
-                storeCurrentData['currDate'] = currentDate;
-                storeCurrentData['currIcon'] = data.weather[0].icon;
-                storeCurrentData['currTemp'] = data.main.temp;
-                storeCurrentData['currHumidity'] = data.main.humidity;
-                storeCurrentData['currWS'] = data.wind.speed;
-                getStoreWeather.push(storeCurrentData);
-                setCurrWXStorage(getStoreWeather);
-            } else {
-                storeCurrentData['city'] = data.name;
-                storeCurrentData['currDate'] = currentDate;
-                storeCurrentData['currIcon'] = data.weather[0].icon;
-                storeCurrentData['currTemp'] = data.main.temp;
-                storeCurrentData['currHumidity'] = data.main.humidity;
-                storeCurrentData['currWS'] = data.wind.speed;
-                getStoreWeather.push(storeCurrentData);
-                setCurrWXStorage(getStoreWeather);
-            }
+            // console.log('result',resultRes);
 
-        },
-        error: function (xhr, textStatus) {
-            console.log(`${xhr.status} ${textStatus}`);
-        }
+            // let getStoreWeather = getCurrWXStorage();
+            // if(getStoreWeather === null) {
+            //     getStoreWeather = [];
+            //     storeData['city'] = data.name;
+            //     storeData['currDate'] = currentDate;
+            //     storeData['currIcon'] = data.weather[0].icon;
+            //     storeData['currTemp'] = data.main.temp;
+            //     storeData['currHumidity'] = data.main.humidity;
+            //     storeData['currWS'] = data.wind.speed;
+            //     // store future data
+            //     storeData['futureData'] = {};
+            //
+            //     getStoreWeather.push(storeData);
+            //     setCurrWXStorage(getStoreWeather);
+            // } else {
+            //     storeData['city'] = data.name;
+            //     storeData['currDate'] = currentDate;
+            //     storeData['currIcon'] = data.weather[0].icon;
+            //     storeData['currTemp'] = data.main.temp;
+            //     storeData['currHumidity'] = data.main.humidity;
+            //     storeData['currWS'] = data.wind.speed;
+            //     getStoreWeather.push(storeData);
+            //     setCurrWXStorage(getStoreWeather);
+            // }
 
-    });
+        // },
+        // error: function (xhr, textStatus) {
+        //     console.log(`${xhr.status} ${textStatus}`);
+        // }
 
+
+
+
+function getUVData(res){
+    UVRes = res;
+    UVIndex = res.value;
+    console.log('second', UVIndex);
+    let UVIndexVal = $('<li>');
+    UVIndexVal.append('UV Index: ' + '<span id="UVData">' + UVIndex + '</span>');
+    ul.append(UVIndexVal);
+    return UVIndex;
 }
 // setCurrWXStorage();
-function setCurrWXStorage(arr){
-    // arr.push(storeCurrentData);
-    console.log('array1',arr);
-    localStorage.setItem('currData', JSON.stringify(arr));
-}
-console.log(storeCurrentData);
-function getCurrWXStorage(){
-    return JSON.parse(localStorage.getItem('currData'));
-}
+
 function getForecastUrlApi() {
     let urlForecastQuery = "https://api.openweathermap.org/data/2.5/forecast?";
     let urlParams = $.param(obj);
@@ -193,17 +215,20 @@ function getForecastData() {
         }
     });
 }
-let resultRes;
+
+let futureDataRes;
+let listDataLength;
 function processForecastData(result) {
-    resultRes = result;
-    const listDataLength = result.list.length;
+    console.log('third');
+    futureDataRes = result;
+    listDataLength = result.list.length;
     for (let i = 0; i < listDataLength; i++) {
-        let dt_txt= result.list[i].dt_txt;
+        let dt_txt = result.list[i].dt_txt;
         let forecastDate = new Date(dt_txt);
         let hour = forecastDate.getHours();
         let minutes = forecastDate.getMinutes();
         let seconds = forecastDate.getSeconds();
-        if(hour === 0 && minutes === 0 && seconds === 0){
+        if (hour === 0 && minutes === 0 && seconds === 0) {
             let cards = $('<div>').addClass('card bg-primary');
             $('#futureInfo').append(cards);
             let cardBody = $('<div>').addClass('card-body');
@@ -233,4 +258,81 @@ function processForecastData(result) {
             // console.log(humidityForecast);
         }
     }
+    console.log('future', futureDataRes);
+    console.log('current', currentDataRes);
+    handleLocalStorage()
+}
+
+function setWXStorage(arr) {
+    // arr.push(storeData);
+    console.log('array1', arr);
+    localStorage.setItem('weatherData', JSON.stringify(arr));
+}
+
+console.log(storeData);
+
+function getWXStorage() {
+    return JSON.parse(localStorage.getItem('weatherData'));
+}
+
+function handleLocalStorage() {
+    let getWeatherArray = getWXStorage();
+    if (getWeatherArray === null) {
+        getWeatherArray = [];
+        storeWeatherData();
+        getWeatherArray.push(storeData);
+        setWXStorage(getWeatherArray);
+    } else {
+        storeWeatherData();
+        getWeatherArray.push(storeData);
+        setWXStorage(getWeatherArray);
+    }
+
+}
+
+function storeWeatherData() {
+    storeData['city'] = currentDataRes.name;
+    storeData['currDate'] = currentDate;
+    storeData['currIcon'] = currentDataRes.weather[0].icon;
+    storeData['currTemp'] = currentDataRes.main.temp;
+    storeData['currHumidity'] = currentDataRes.main.humidity;
+    storeData['currWS'] = currentDataRes.wind.speed;
+    console.log('UV',UVIndex);
+    storeData['currUV']= UVIndex;
+    storeData['futureWeather']= {};
+
+    // For Loop
+    for (let i = 0; i < listDataLength; i++) {
+        let dt_txt = futureDataRes.list[i].dt_txt;
+        let forecastDate = new Date(dt_txt);
+        let hour = forecastDate.getHours();
+        let minutes = forecastDate.getMinutes();
+        let seconds = forecastDate.getSeconds();
+        if (hour === 0 && minutes === 0 && seconds === 0) {
+            
+            let forecastDay = forecastDate.toLocaleDateString();
+
+
+            console.log('forecast',forecastDay);
+
+
+            let weatherIconCode = futureDataRes.list[i].weather[0].icon;
+
+            console.log('icon',weatherIconCode);
+
+
+
+            let tempForecast = futureDataRes.list[i].main.temp;
+
+
+            console.log('temperature',tempForecast);
+
+
+            let humidityForecast = futureDataRes.list[i].main.humidity;
+
+
+            console.log('humidity', humidityForecast);
+        }
+    }
+
 }
