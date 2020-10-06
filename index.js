@@ -220,6 +220,7 @@ let futureDataRes;
 let listDataLength;
 function processForecastData(result) {
     console.log('third');
+    $('#futureInfo').empty();
     futureDataRes = result;
     listDataLength = result.list.length;
     for (let i = 0; i < listDataLength; i++) {
@@ -229,6 +230,7 @@ function processForecastData(result) {
         let minutes = forecastDate.getMinutes();
         let seconds = forecastDate.getSeconds();
         if (hour === 0 && minutes === 0 && seconds === 0) {
+
             let cards = $('<div>').addClass('card bg-primary');
             $('#futureInfo').append(cards);
             let cardBody = $('<div>').addClass('card-body');
@@ -260,9 +262,24 @@ function processForecastData(result) {
     }
     console.log('future', futureDataRes);
     console.log('current', currentDataRes);
-    handleLocalStorage()
+    handleLocalStorage();
+    populateSearch();
 }
+function populateSearch(){
+    let weatherArray = getWXStorage();
 
+    let searchHistory = $('#searchHistory');
+    searchHistory.empty();
+    let searchList = $('<ul>').addClass('list-group');
+    searchHistory.append(searchList);
+    for(let i=0; i < weatherArray.length; i++){
+        let weatherCity = weatherArray[i].city;
+        let searchItem = $('<li>').addClass('list-group-item').attr('data-city', weatherCity);
+        searchList.append(searchItem);
+        let listBtn = $('<a class="btn">').attr('href', '#').text(weatherCity);
+        searchItem.append(listBtn)
+    }
+}
 function setWXStorage(arr) {
     // arr.push(storeData);
     console.log('array1', arr);
@@ -283,6 +300,14 @@ function handleLocalStorage() {
         getWeatherArray.push(storeData);
         setWXStorage(getWeatherArray);
     } else {
+        for(let i=0; i<getWeatherArray.length; i++){
+            if(getWeatherArray[i].city === currentDataRes.name){
+                storeWeatherData();
+                getWeatherArray.splice(i,1,storeData);
+                setWXStorage(getWeatherArray);
+                return;
+            }
+        }
         storeWeatherData();
         getWeatherArray.push(storeData);
         setWXStorage(getWeatherArray);
@@ -309,29 +334,27 @@ function storeWeatherData() {
         let minutes = forecastDate.getMinutes();
         let seconds = forecastDate.getSeconds();
         if (hour === 0 && minutes === 0 && seconds === 0) {
-            
+
             let forecastDay = forecastDate.toLocaleDateString();
-
-
-            console.log('forecast',forecastDay);
-
+            storeData['futureWeather']['futDayPred'] = forecastDay;
+            // console.log('forecast',forecastDay);
 
             let weatherIconCode = futureDataRes.list[i].weather[0].icon;
-
-            console.log('icon',weatherIconCode);
+            storeData['futureWeather']['futIconCode'] = weatherIconCode;
+            // console.log('icon',weatherIconCode);
 
 
 
             let tempForecast = futureDataRes.list[i].main.temp;
+            storeData['futureWeather']['futTemp'] = tempForecast;
 
-
-            console.log('temperature',tempForecast);
+            // console.log('temperature',tempForecast);
 
 
             let humidityForecast = futureDataRes.list[i].main.humidity;
+            storeData['futureWeather']['futHumidity'] = humidityForecast;
 
-
-            console.log('humidity', humidityForecast);
+            // console.log('humidity', humidityForecast);
         }
     }
 
