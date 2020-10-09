@@ -2,7 +2,7 @@ let inputValue;
 let obj;
 
 $(function () {
-
+    loadValues();
     $('#search').on('click', function (event) {
         event.preventDefault();
         inputValue = $('#inputVal').val();
@@ -475,3 +475,101 @@ $(document).on('click', 'li .btn', function(event){
     }
 
 });
+
+function loadValues(){
+    let getWeather = getWXStorage();
+    if(getWeather != null) {
+        let lastSearch = getWeather.pop();
+        console.log(lastSearch);
+        $('#currentCond').empty();
+
+        //populate load values
+        let city = '<span id="city">' + lastSearch.city + ' ' + '(' + lastSearch.currDate + ')' + '</span>';
+
+        // print image icon
+
+        let Wrapper = $('<div>');
+        Wrapper.append(city);
+
+        // console.log(date.toLocaleDateString());
+        let img = $('<img src="" alt="weatherCondition">');
+        let iconCode = lastSearch.currIcon;
+        let iconUrl = "http://openweathermap.org/img/wn/" + iconCode + ".png";
+        img.attr('src', iconUrl);
+        Wrapper.append(img);
+        $('#currentCond').append(Wrapper);
+
+        // print Temp conditions
+
+        ul = $('<ul>');
+        ul.addClass('list-unstyled');
+        ul.css('line-height', '3');
+
+        $('#currentCond').append(ul);
+
+        // let Temp = $('<li>').text(`Temperature: ${data.main.temp} ${&#8457;}`);
+        let Temp = $('<li>');
+        // Temp.attr('value', '' + String.fromCharCode(176));
+        // Temp.text($(Temp).attr('value'));
+        // Temp.append('&deg;');
+        Temp.append(`Temperature: ${lastSearch.currTemp}&#8457;`);
+        ul.append(Temp);
+        let Humidity = $('<li>');
+        Humidity.text('Humidity: ' + lastSearch.currHumidity + '%');
+        ul.append(Humidity);
+        let windSpeed = $('<li>');
+        windSpeed.text('Wind Speed: ' + lastSearch.currWS + 'MPH');
+        ul.append(windSpeed);
+        // console.log(data.coord.lat);
+        let UVIndexVal = $('<li>');
+        UVIndexVal.append('UV Index: ' + '<span id="UVData">' + lastSearch.currUV + '</span>');
+        ul.append(UVIndexVal);
+
+
+        // populate five day forecast
+        $('#futureInfo').empty();
+        let futureWXArr = lastSearch.futureWeatherArray;
+        let futureWXDay = lastSearch.futureWeatherArray[0].futDayPred;
+        console.log('5', futureWXDay);
+        console.log(futureWXArr);
+        console.log(futureWXArr.length);
+        for (let j = 0; j < lastSearch.futureWeatherArray.length; j++) {
+            let futDay = lastSearch.futureWeatherArray[j].futDayPred;
+            let futIconCode = lastSearch.futureWeatherArray[j].futIconCode;
+            let futTemp = lastSearch.futureWeatherArray[j].futTemp;
+            let futHumidity = lastSearch.futureWeatherArray[j].futHumidity;
+
+
+            let cards = $('<div>').addClass('card bg-primary');
+            $('#futureInfo').append(cards);
+            let cardBody = $('<div>').addClass('card-body');
+            cards.append(cardBody);
+            let futureDate = $('<p>').addClass('card-text font-weight-bold');
+            let forecastDay = futDay;
+            futureDate.text(forecastDay);
+            cardBody.append(futureDate);
+            // console.log(forecastDay);
+
+            let weatherIcon = $('<img src="" alt="WeatherIcon">');
+            let weatherIconCode = futIconCode;
+            let weatherIconUrl = "http://openweathermap.org/img/wn/" + weatherIconCode + ".png";
+            weatherIcon.attr('src', weatherIconUrl);
+            cardBody.append(weatherIcon);
+
+            let temperature = $('<p>').addClass('card-text');
+            let tempForecast = futTemp;
+            temperature.append(`Temp: ${tempForecast} &#8457;`);
+            cardBody.append(temperature);
+            // console.log(tempForecast);
+
+            let humidityCond = $('<p>').addClass('card-text');
+            let humidityForecast = futHumidity;
+            humidityCond.text(`Humidity: ${humidityForecast}%`);
+            cardBody.append(humidityCond);
+
+
+        }
+        populateSearch();
+    }
+
+}
