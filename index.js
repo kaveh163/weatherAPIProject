@@ -73,7 +73,8 @@ async function processData(data) {
 
     const img = $('<img src="" alt="weatherCondition">');
     let iconCode = data.weather[0].icon;
-    let iconUrl = "http://openweathermap.org/img/wn/" + iconCode + ".png";
+    console.log('iconCode', iconCode);
+    let iconUrl = "https://openweathermap.org/img/wn/" + iconCode + ".png";
     img.attr('src', iconUrl);
     imgWrapper.append(img);
     $('#currentCond').append(imgWrapper);
@@ -101,8 +102,10 @@ async function processData(data) {
     ul.append(windSpeed);
     //Get latitude and longitude
     let latitude = data.coord.lat;
+    console.log('latitude', latitude);
 
     let longitude = data.coord.lon;
+    console.log('longitude',longitude);
     //Get UV Result
     let UVResult = await getUVIndex(latitude, longitude);
     console.log(UVResult);
@@ -121,7 +124,7 @@ async function getUVIndex(lat, lon) {
     let res;
     try {
         res = await $.ajax({
-            url: `http://api.openweathermap.org/data/2.5/uvi?lat=${lat}&lon=${lon}&appid=ea96ca10dc430cd769f78ede39efa7a1`,
+            url: `https://api.openweathermap.org/data/2.5/uvi?lat=${lat}&lon=${lon}&appid=ea96ca10dc430cd769f78ede39efa7a1`,
 
             method: 'GET'
         });
@@ -193,7 +196,7 @@ function processForecastData(result) {
 
             let weatherIcon = $('<img src="" alt="WeatherIcon">');
             let weatherIconCode = result.list[i].weather[0].icon;
-            let weatherIconUrl = "http://openweathermap.org/img/wn/" + weatherIconCode + ".png";
+            let weatherIconUrl = "https://openweathermap.org/img/wn/" + weatherIconCode + ".png";
             weatherIcon.attr('src', weatherIconUrl);
             cardBody.append(weatherIcon);
 
@@ -341,7 +344,7 @@ $(document).on('click', 'li .btn', function (event) {
 
             let img = $('<img src="" alt="weatherCondition">');
             let iconCode = getWeather[i].currIcon;
-            let iconUrl = "http://openweathermap.org/img/wn/" + iconCode + ".png";
+            let iconUrl = "https://openweathermap.org/img/wn/" + iconCode + ".png";
             img.attr('src', iconUrl);
             Wrapper.append(img);
             $('#currentCond').append(Wrapper);
@@ -395,7 +398,7 @@ $(document).on('click', 'li .btn', function (event) {
 
                 let weatherIcon = $('<img src="" alt="WeatherIcon">');
                 let weatherIconCode = futIconCode;
-                let weatherIconUrl = "http://openweathermap.org/img/wn/" + weatherIconCode + ".png";
+                let weatherIconUrl = "https://openweathermap.org/img/wn/" + weatherIconCode + ".png";
                 weatherIcon.attr('src', weatherIconUrl);
                 cardBody.append(weatherIcon);
 
@@ -438,7 +441,7 @@ function loadValues() {
 
         let img = $('<img src="" alt="weatherCondition">');
         let iconCode = lastSearch.currIcon;
-        let iconUrl = "http://openweathermap.org/img/wn/" + iconCode + ".png";
+        let iconUrl = "https://openweathermap.org/img/wn/" + iconCode + ".png";
         img.attr('src', iconUrl);
         Wrapper.append(img);
         $('#currentCond').append(Wrapper);
@@ -496,7 +499,7 @@ function loadValues() {
 
             let weatherIcon = $('<img src="" alt="WeatherIcon">');
             let weatherIconCode = futIconCode;
-            let weatherIconUrl = "http://openweathermap.org/img/wn/" + weatherIconCode + ".png";
+            let weatherIconUrl = "https://openweathermap.org/img/wn/" + weatherIconCode + ".png";
             weatherIcon.attr('src', weatherIconUrl);
             cardBody.append(weatherIcon);
 
