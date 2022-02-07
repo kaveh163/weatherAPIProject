@@ -105,7 +105,7 @@ async function processData(data) {
     console.log('latitude', latitude);
 
     let longitude = data.coord.lon;
-    console.log('longitude',longitude);
+    console.log('longitude', longitude);
     //Get UV Result
     let UVResult = await getUVIndex(latitude, longitude);
     console.log(UVResult);
@@ -173,6 +173,7 @@ let listDataLength;
 
 function processForecastData(result) {
     console.log('third');
+    let html = '';
     $('#futureInfo').empty();
     futureDataRes = result;
     listDataLength = result.list.length;
@@ -182,37 +183,58 @@ function processForecastData(result) {
         let hour = forecastDate.getHours();
         let minutes = forecastDate.getMinutes();
         let seconds = forecastDate.getSeconds();
+        let tempForecast = result.list[i].main.temp;
+        console.log(tempForecast);
         if (hour === 0 && minutes === 0 && seconds === 0) {
-            //populate 5 weather Forecast
-            let cards = $('<div>').addClass('card bg-primary');
-            $('#futureInfo').append(cards);
-            let cardBody = $('<div>').addClass('card-body');
-            cards.append(cardBody);
-            let futureDate = $('<p>').addClass('card-text font-weight-bold');
             let forecastDay = forecastDate.toLocaleDateString();
-            futureDate.text(forecastDay);
-            cardBody.append(futureDate);
-
-
-            let weatherIcon = $('<img src="" alt="WeatherIcon">');
             let weatherIconCode = result.list[i].weather[0].icon;
             let weatherIconUrl = "https://openweathermap.org/img/wn/" + weatherIconCode + ".png";
-            weatherIcon.attr('src', weatherIconUrl);
-            cardBody.append(weatherIcon);
-
-            let temperature = $('<p>').addClass('card-text');
-            let tempForecast = result.list[i].main.temp;
-            temperature.append(`Temp: ${tempForecast} &#8457;`);
-            cardBody.append(temperature);
-
-
-            let humidityCond = $('<p>').addClass('card-text');
             let humidityForecast = result.list[i].main.humidity;
-            humidityCond.text(`Humidity: ${humidityForecast}%`);
-            cardBody.append(humidityCond);
+            //populate 5 weather Forecast
+            html += '<div class="col">'
+            html += '<div class="card cardSize bg-primary">'
+            html += '<div class="card-body center">'
+            html += `<p class="font-weight-bold">${forecastDay}</p>`
+            html += `<img src="${weatherIconUrl}" alt="WeatherIcon">`
+            html += `<p class="">Temp: ${tempForecast} &#8457;</p>`
+            html += `<p class="">Humidity: ${humidityForecast}%</p>`
+            html += '</div>'
+            html += '</div>'
+            html += '</div>';
+
+            // let column = $('<div class="col">');
+            // $('#futureInfo').append(column);
+            // let cards = $('<div class="card">');
+            // column.append(cards);
+            // let cardBody = $('<div>').addClass('card-body');
+            // cards.append(cardBody);
+            // let futureDate = $('<p>').addClass('card-text font-weight-bold');
+
+            // futureDate.text(forecastDay);
+            // cardBody.append(futureDate);
+
+
+            // let weatherIcon = $('<img src="" alt="WeatherIcon">');
+            // let weatherIconCode = result.list[i].weather[0].icon;
+            // let weatherIconUrl = "https://openweathermap.org/img/wn/" + weatherIconCode + ".png";
+            // weatherIcon.attr('src', weatherIconUrl);
+            // cardBody.append(weatherIcon);
+
+            // let temperature = $('<p>').addClass('card-text');
+            // let tempForecast = result.list[i].main.temp;
+            // temperature.append(`Temp: ${tempForecast} &#8457;`);
+            // cardBody.append(temperature);
+
+
+            // let humidityCond = $('<p>').addClass('card-text');
+            // let humidityForecast = result.list[i].main.humidity;
+            // humidityCond.text(`Humidity: ${humidityForecast}%`);
+            // cardBody.append(humidityCond);
 
         }
+
     }
+    $('#futureInfo').append(html);
 
     handleLocalStorage();
     populateSearch();
@@ -229,7 +251,10 @@ function populateSearch() {
         let weatherCity = weatherArray[i].city;
         let searchItem = $('<li>').addClass('list-group-item');
         searchList.append(searchItem);
-        let listBtn = $('<a class="btn">').attr({'href': '#', 'data-city': weatherCity}).text(weatherCity);
+        let listBtn = $('<a class="btn">').attr({
+            'href': '#',
+            'data-city': weatherCity
+        }).text(weatherCity);
         searchItem.append(listBtn)
     }
 }
@@ -375,6 +400,7 @@ $(document).on('click', 'li .btn', function (event) {
 
 
             // populate five day forecast
+            let html = '';
             $('#futureInfo').empty();
             let futureWXArr = getWeather[i].futureWeatherArray;
 
@@ -384,38 +410,63 @@ $(document).on('click', 'li .btn', function (event) {
                 let futIconCode = getWeather[i].futureWeatherArray[j].futIconCode;
                 let futTemp = getWeather[i].futureWeatherArray[j].futTemp;
                 let futHumidity = getWeather[i].futureWeatherArray[j].futHumidity;
-
-
-                let cards = $('<div>').addClass('card bg-primary');
-                $('#futureInfo').append(cards);
-                let cardBody = $('<div>').addClass('card-body');
-                cards.append(cardBody);
-                let futureDate = $('<p>').addClass('card-text font-weight-bold');
                 let forecastDay = futDay;
-                futureDate.text(forecastDay);
-                cardBody.append(futureDate);
-
-
-                let weatherIcon = $('<img src="" alt="WeatherIcon">');
                 let weatherIconCode = futIconCode;
                 let weatherIconUrl = "https://openweathermap.org/img/wn/" + weatherIconCode + ".png";
-                weatherIcon.attr('src', weatherIconUrl);
-                cardBody.append(weatherIcon);
-
-                let temperature = $('<p>').addClass('card-text');
                 let tempForecast = futTemp;
-                temperature.append(`Temp: ${tempForecast} &#8457;`);
-                cardBody.append(temperature);
-
-
-                let humidityCond = $('<p>').addClass('card-text');
                 let humidityForecast = futHumidity;
-                humidityCond.text(`Humidity: ${humidityForecast}%`);
-                cardBody.append(humidityCond);
+                html += '<div class="col">'
+                html += '<div class="card cardSize bg-primary">'
+                html += '<div class="card-body center">'
+                html += `<p class="font-weight-bold">${forecastDay}</p>`
+                html += `<img src="${weatherIconUrl}" alt="WeatherIcon">`
+                html += `<p class="">Temp: ${tempForecast} &#8457;</p>`
+                html += `<p class="">Humidity: ${humidityForecast}%</p>`
+                html += '</div>'
+                html += '</div>'
+                html += '</div>';
+
+
+                // Html += '<div class="col">'
+                // Html += '<div class="card">'
+                // Html += '<div class="card-body">'
+                // Html += `<p class="font-weight-bold">${forecastDay}</p>`
+                // Html += `<img src="${weatherIconUrl}" alt="WeatherIcon">`
+                // Html += `<p>Temp: ${tempForecast} &#8457;</p>`
+                // Html += `<p>Humidity: ${humidityForecast}%</p>`
+                // Html += '<div>'
+                // Html += '</div>'
+                // Html += '</div>'
+                // let cards = $('<div>').addClass('card bg-primary');
+                // $('#futureInfo').append(cards);
+                // let cardBody = $('<div>').addClass('card-body');
+                // cards.append(cardBody);
+                // let futureDate = $('<p>').addClass('card-text font-weight-bold');
+                // let forecastDay = futDay;
+                // futureDate.text(forecastDay);
+                // cardBody.append(futureDate);
+
+
+                // let weatherIcon = $('<img src="" alt="WeatherIcon">');
+                // let weatherIconCode = futIconCode;
+                // let weatherIconUrl = "https://openweathermap.org/img/wn/" + weatherIconCode + ".png";
+                // weatherIcon.attr('src', weatherIconUrl);
+                // cardBody.append(weatherIcon);
+
+                // let temperature = $('<p>').addClass('card-text');
+                // let tempForecast = futTemp;
+                // temperature.append(`Temp: ${tempForecast} &#8457;`);
+                // cardBody.append(temperature);
+
+
+                // let humidityCond = $('<p>').addClass('card-text');
+                // let humidityForecast = futHumidity;
+                // humidityCond.text(`Humidity: ${humidityForecast}%`);
+                // cardBody.append(humidityCond);
 
 
             }
-
+            $('#futureInfo').append(html);
 
         }
     }
@@ -475,7 +526,7 @@ function loadValues() {
 
 
         // populate five day forecast
-
+        let html = '';
         $('#futureInfo').empty();
         let futureWXArr = lastSearch.futureWeatherArray;
 
@@ -485,37 +536,53 @@ function loadValues() {
             let futIconCode = lastSearch.futureWeatherArray[j].futIconCode;
             let futTemp = lastSearch.futureWeatherArray[j].futTemp;
             let futHumidity = lastSearch.futureWeatherArray[j].futHumidity;
-
-
-            let cards = $('<div>').addClass('card bg-primary');
-            $('#futureInfo').append(cards);
-            let cardBody = $('<div>').addClass('card-body');
-            cards.append(cardBody);
-            let futureDate = $('<p>').addClass('card-text font-weight-bold');
             let forecastDay = futDay;
-            futureDate.text(forecastDay);
-            cardBody.append(futureDate);
-
-
-            let weatherIcon = $('<img src="" alt="WeatherIcon">');
             let weatherIconCode = futIconCode;
             let weatherIconUrl = "https://openweathermap.org/img/wn/" + weatherIconCode + ".png";
-            weatherIcon.attr('src', weatherIconUrl);
-            cardBody.append(weatherIcon);
-
-            let temperature = $('<p>').addClass('card-text');
             let tempForecast = futTemp;
-            temperature.append(`Temp: ${tempForecast} &#8457;`);
-            cardBody.append(temperature);
-
-
-            let humidityCond = $('<p>').addClass('card-text');
             let humidityForecast = futHumidity;
-            humidityCond.text(`Humidity: ${humidityForecast}%`);
-            cardBody.append(humidityCond);
+            html += '<div class="col">'
+            html += '<div class="card cardSize bg-primary">'
+            html += '<div class="card-body center">'
+            html += `<p class="font-weight-bold">${forecastDay}</p>`
+            html += `<img src="${weatherIconUrl}" alt="WeatherIcon">`
+            html += `<p class="">Temp: ${tempForecast} &#8457;</p>`
+            html += `<p class="">Humidity: ${humidityForecast}%</p>`
+            html += '</div>'
+            html += '</div>'
+            html += '</div>';
+
+
+            // let cards = $('<div>').addClass('card bg-primary');
+            // $('#futureInfo').append(cards);
+            // let cardBody = $('<div>').addClass('card-body');
+            // cards.append(cardBody);
+            // let futureDate = $('<p>').addClass('card-text font-weight-bold');
+            // let forecastDay = futDay;
+            // futureDate.text(forecastDay);
+            // cardBody.append(futureDate);
+
+
+            // let weatherIcon = $('<img src="" alt="WeatherIcon">');
+            // let weatherIconCode = futIconCode;
+            // let weatherIconUrl = "https://openweathermap.org/img/wn/" + weatherIconCode + ".png";
+            // weatherIcon.attr('src', weatherIconUrl);
+            // cardBody.append(weatherIcon);
+
+            // let temperature = $('<p>').addClass('card-text');
+            // let tempForecast = futTemp;
+            // temperature.append(`Temp: ${tempForecast} &#8457;`);
+            // cardBody.append(temperature);
+
+
+            // let humidityCond = $('<p>').addClass('card-text');
+            // let humidityForecast = futHumidity;
+            // humidityCond.text(`Humidity: ${humidityForecast}%`);
+            // cardBody.append(humidityCond);
 
 
         }
+        $('#futureInfo').append(html);
         populateSearch();
     }
 
