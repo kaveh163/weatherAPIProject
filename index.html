@@ -21,29 +21,31 @@
     <!--start section container-->
     <section class="container-fluid">
         <!--    start title-->
-        <section class="row m-0 p-0">
+        <section class="row ">
             <section class="col-12 heading">
-                <section class="jumbotron bg-dark title">
+                <section class="jumbotron bg-dark title m-0 p-5">
                     <h1 class="header text-capitalize">weather dashboard</h1>
                 </section>
             </section>
         </section>
         <!--    end title-->
 
-        <section class="row m-0 p-0">
+        <section class="row ">
             <!--        left Column-->
-            <section class="col-12 col-sm-4 leftCol">
-                <h6 class="searchHeader">Search for a City:</h6>
-                <form action="" class="d-flex mb-3">
-                    
+            <section class="col-12 col-sm-4 mt-3">
+                <section class="leftCol">
+                    <h6 class="searchHeader">Search for a City:</h6>
+                    <form action="" class="d-flex mb-3">
+
                         <input type="text" class="form-control" id="inputVal">
                         <button type="submit" id="search" class="btn btn-primary search"><i class="fas fa-search"></i>
                         </button>
-                    
-                </form>
-                <!--            This is where our search history goes-->
-                <section id="searchHistory"></section>
-                <!--            end of search history section-->
+
+                    </form>
+                    <!--            This is where our search history goes-->
+                    <section id="searchHistory"></section>
+                    <!--            end of search history section-->
+                </section>
             </section>
             <!--        end of left column-->
 
